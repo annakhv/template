@@ -47,5 +47,19 @@ public class templateTest {
                 "text", "Hello, you are invited to introductory meeting of out training");
         Assertions.assertEquals(expected, Parser.parseTemplate(input), "template map is not correctly generated");
     }
-
+    @Test
+    public void parseTemplateWithExtraInputTest() {
+        String input = """
+                from : #{MamukaKiknadze@gmail.com}
+                to : #{GiorgiDolidze@gmail.com}
+                cc : #{MakaDolidze@gmail.com,NinoNino1998@gmail.com }
+                subject : #{introduction meeting}
+                text : #{Hello, you are invited to introductory meeting of out training}
+                """;
+        Map<String, String> expected = Map.of("from", "MamukaKiknadze@gmail.com",
+                "to", "GiorgiDolidze@gmail.com",
+                "subject", "introduction meeting",
+                "text", "Hello, you are invited to introductory meeting of out training");
+        Assertions.assertEquals(expected, Parser.parseTemplate(input), "template map is not correctly generated");
+    }
 }
