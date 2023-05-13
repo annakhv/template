@@ -1,10 +1,11 @@
 package com.messenger.template;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Parser {
-    public static Map<String,String> parseTemplate(String template){
+    public static Map<String,String> parseTemplate(String template, List<String> validFields){
         String valueTemplate="#{value}";
       String[] values=template.split("\\n");
       Map<String,String> map=new LinkedHashMap<>();
@@ -14,9 +15,12 @@ public class Parser {
           }else{
               String[] pair=val.split(":");
               String key=pair[0].trim();
-              String value=pair[1].trim();
-              String endValue=value.substring(2,value.length()-1);
-              map.put(key,endValue);
+              if(validFields.contains(key)){
+                  String value=pair[1].trim();
+                  String endValue=value.substring(2,value.length()-1);
+                  map.put(key,endValue);
+              }
+
           }
       }
       return map;
