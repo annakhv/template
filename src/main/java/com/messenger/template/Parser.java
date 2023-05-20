@@ -7,30 +7,31 @@ import java.util.Map;
 public class Parser {
 
 
-    public static Parser getParserInstance(){
+    public static Parser getParserInstance() {
         return new Parser();
     }
-    public  Map<String,String> parseTemplate(String template, List<String> validFields){
-        String valueTemplate="#{value}";
-      String[] values=template.split("\\n");
-      Map<String,String> map=new LinkedHashMap<>();
-      for (String val:values){
-          if (val.contains(valueTemplate)){
-              throw new RuntimeException("template fields should not be empty");
-          }else{
-              String[] pair=val.split(":");
-              String key=pair[0].trim();
-              if(validFields.contains(key)){
-                  String value=pair[1].trim();
-                  String endValue=value.substring(2,value.length()-1);
-                  map.put(key,endValue);
-              }
 
-          }
-      }
-      if(map.keySet().size()!=validFields.size()){
-          throw new RuntimeException("not all fields are filled from "+validFields);
-      }
-      return map;
+    public Map<String, String> parseTemplate(String template, List<String> validFields) {
+        String valueTemplate = "#{value}";
+        String[] values = template.split("\\n");
+        Map<String, String> map = new LinkedHashMap<>();
+        for (String val : values) {
+            if (val.contains(valueTemplate)) {
+                throw new RuntimeException("template fields should not be empty");
+            } else {
+                String[] pair = val.split(":");
+                String key = pair[0].trim();
+                if (validFields.contains(key)) {
+                    String value = pair[1].trim();
+                    String endValue = value.substring(2, value.length() - 1);
+                    map.put(key, endValue);
+                }
+
+            }
+        }
+        if (map.keySet().size() != validFields.size()) {
+            throw new RuntimeException("not all fields are filled from " + validFields);
+        }
+        return map;
     }
 }

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +21,11 @@ public class MainTest {
     @Test
     public void chooseModeTestWhenModeConsole() throws InterruptedException {
         String input = "console";
+        List<String> fields = List.of("from", "to", "subject", "text");
         TemplateGenerator templateGenerator = mock(TemplateGenerator.class);
         ConsoleMode mode = mock(ConsoleMode.class);
         Parser parser = spy(Parser.class);
-        when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
+        when(templateGenerator.generateTemplate(fields))
                 .thenReturn("""
                         from : #{value}
                         to : #{value}
@@ -41,15 +44,17 @@ public class MainTest {
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
                 """);
-        doReturn(Map.of("from", "MamukaKiknadze@gmail.com",
-                "to", "GiorgiDolidze@gmail.com",
-                "subject", "introduction meeting",
-                "text", "Hello, you are invited to introductory meeting of out training")).when(parser).parseTemplate(eq("""
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("from", "MamukaKiknadze@gmail.com");
+        map.put("to", "GiorgiDolidze@gmail.com");
+        map.put("subject", "introduction meeting");
+        map.put("text", "Hello, you are invited to introductory meeting of out training");
+        doReturn(map).when(parser).parseTemplate(eq("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
-                """), eq(List.of("from", "to", "subject", "text")));
+                """), eq(fields));
         doNothing().when(mode).writeConsoleOutput("""
                 from : MamukaKiknadze@gmail.com
                 to : GiorgiDolidze@gmail.com
@@ -63,44 +68,49 @@ public class MainTest {
                 text : Hello, you are invited to introductory meeting of out training
                 """;
 
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(null, null, input, mode, parser));
+        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(null, null, input, mode, parser, fields));
     }
 
     @Test
     public void chooseModeTestWhenModeFile() throws InterruptedException {
         String input = "file";
+        List<String> fields = List.of("from", "to", "subject", "text");
         TemplateGenerator templateGenerator = mock(TemplateGenerator.class);
-        FileMode mode = mock(FileMode.class);
+        FileMode modeFile = mock(FileMode.class);
         Parser parser = spy(Parser.class);
-        when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
+        when(templateGenerator.generateTemplate(fields))
                 .thenReturn("""
                         from : #{value}
                         to : #{value}
                         subject : #{value}
                         text : #{value}
                         """);
-        doNothing().when(mode).writeFileOutPut(any(), any(), eq("""
+        doNothing().when(modeFile).writeFileOutPut(any(), any(), eq("""
                 from : #{value}
                 to : #{value}
                 subject : #{value}
                 text : #{value}
                 """));
-        when(mode.readFileInput(any(), eq("/resources/file.txt"))).thenReturn("""
+        ByteArrayInputStream in = new ByteArrayInputStream("yes".getBytes());
+        System.setIn(in);
+        when(modeFile.readFileInput(any(), eq("/resources/file.txt"))).thenReturn("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
                 """);
-        doReturn(Map.of("from", "MamukaKiknadze@gmail.com",
-                "to", "GiorgiDolidze@gmail.com",
-                "subject", "introduction meeting",
-                "text", "Hello, you are invited to introductory meeting of out training")).when(parser).parseTemplate(eq("""
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("from", "MamukaKiknadze@gmail.com");
+        map.put("to", "GiorgiDolidze@gmail.com");
+        map.put("subject", "introduction meeting");
+        map.put("text", "Hello, you are invited to introductory meeting of out training");
+        doReturn(map).when(parser).parseTemplate(eq("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
-                """), eq(List.of("from", "to", "subject", "text")));
-        doNothing().when(mode).writeFileOutPut(eq("fileOutput"), eq("/resources/fileoutput.txt"),
+                """), eq(fields));
+        doNothing().when(modeFile).writeFileOutPut(eq("fileOutput"), eq("/resources/fileoutput.txt"),
                 eq("""
                         from : MamukaKiknadze@gmail.com
                         to : GiorgiDolidze@gmail.com
@@ -114,22 +124,23 @@ public class MainTest {
                 subject : introduction meeting
                 text : Hello, you are invited to introductory meeting of out training
                 """;
-
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer("fileInput", "/resources/file.txt", input, mode, parser));
+        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer("fileInput", "/resources/file.txt", input, modeFile, parser, fields));
     }
 
     @Test
     public void chooseUnknownModeTest() {
         String mode = "dummyMode";
+        List<String> fields = List.of("from", "to", "subject", "text");
         TemplateGenerator templateGenerator = mock(TemplateGenerator.class);
-        when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
+        ConsoleMode modeConsole = mock(ConsoleMode.class);
+        when(templateGenerator.generateTemplate(fields))
                 .thenReturn("""
                         from : #{value}
                         to : #{value}
                         subject : #{value}
                         text : #{value}
                         """);
-        Assertions.assertThrows(RuntimeException.class, () -> Main.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, null, null));
+        Assertions.assertThrows(RuntimeException.class, () -> Main.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, modeConsole, null, fields));
 
     }
 }
