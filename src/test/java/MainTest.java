@@ -1,6 +1,7 @@
 import com.messenger.Main;
 import com.messenger.mode.ConsoleMode;
 import com.messenger.mode.FileMode;
+import com.messenger.mode.Mode;
 import com.messenger.template.Parser;
 import com.messenger.template.TemplateGenerator;
 import org.junit.Test;
@@ -105,5 +106,20 @@ public class MainTest {
                 """;
 
         Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer("fileInput", "/resources/file.txt", input, mode, parser));
+    }
+
+    @Test
+    public void chooseUnknownModeTest(){
+        String mode="dummyMode";
+        TemplateGenerator templateGenerator = mock(TemplateGenerator.class);
+        when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
+                .thenReturn("""
+                        from : #{value}
+                        to : #{value}
+                        subject : #{value}
+                        text : #{value}
+                        """);
+        Assertions.assertThrows(RuntimeException.class,()->Main.getMainInstance().chooseModeAndGiveAnswer(null,null,mode,new Mode(),new Parser()));
+
     }
 }
