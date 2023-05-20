@@ -1,6 +1,7 @@
 package com.messenger;
 
 import com.messenger.mode.ConsoleMode;
+import com.messenger.mode.FileMode;
 import com.messenger.mode.Mode;
 import com.messenger.template.Parser;
 import com.messenger.template.TemplateGenerator;
@@ -19,11 +20,16 @@ public class Main {
     }
 
 
-    public String chooseModeAndGiveAnswer(String mode, Mode modeInstance,Parser parser) {
+    public String chooseModeAndGiveAnswer(String filename,String filePath, String mode, Mode modeInstance,Parser parser) {
         List<String> fields = List.of("from", "to", "cc", "subject", "text");
         String template = TemplateGenerator.getTemplateGenerator()
                 .generateTemplate(fields);
         if ("file".equalsIgnoreCase(mode)) {
+            FileMode fileMode=(FileMode) modeInstance;
+            String inputFromTemplate=fileMode.readFileInput(filename,filePath);
+           Map<String,String> resulMap=parser.parseTemplate(inputFromTemplate,fields);
+           String result=createResult(resulMap);
+           return result;
 
         } else if ("console".equalsIgnoreCase(mode)) {
             ConsoleMode consoleMode = (ConsoleMode)modeInstance;
