@@ -28,6 +28,9 @@ public class Parser {
 
           }
       }
+      if(map.keySet().size()!=validFields.size()){
+          throw new RuntimeException("not all fields are filled from "+validFields);
+      }
       return map;
     }
 }
