@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Parser {
-    public static Map<String,String> parseTemplate(String template, List<String> validFields){
+    public  Map<String,String> parseTemplate(String template, List<String> validFields){
         String valueTemplate="#{value}";
       String[] values=template.split("\\n");
       Map<String,String> map=new LinkedHashMap<>();
