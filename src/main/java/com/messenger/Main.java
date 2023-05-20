@@ -16,11 +16,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Main main=Main.getMainInstance();
+        Mode mode=ConsoleMode.getConsoleModeInstance();
+        Parser parser=Parser.getParserInstance();
+        main.chooseModeAndGiveAnswer(null,null,"console",mode,parser);
     }
 
 
-    public String chooseModeAndGiveAnswer(String filename,String filePath, String mode, Mode modeInstance,Parser parser) throws InterruptedException {
+    public String chooseModeAndGiveAnswer(String filename,String filePath, String mode, Mode modeInstance,Parser parser)  {
         List<String> fields = List.of("from", "to", "cc", "subject", "text");
         String template = TemplateGenerator.getTemplateGenerator()
                 .generateTemplate(fields);

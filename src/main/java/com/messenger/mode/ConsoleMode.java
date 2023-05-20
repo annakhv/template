@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleMode extends Mode {
+public class
+ConsoleMode extends Mode {
 
     public static ConsoleMode getConsoleModeInstance() {
         return new ConsoleMode();
@@ -15,7 +16,6 @@ public class ConsoleMode extends Mode {
         try {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(System.in));
-
             String line;
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");
