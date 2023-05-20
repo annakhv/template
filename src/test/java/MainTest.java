@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,48 +18,48 @@ import static org.mockito.Mockito.*;
 public class MainTest {
 
     @Test
-    public void chooseModeTestWhenModeConsole(){
-        String input="console";
-        TemplateGenerator templateGenerator=mock(TemplateGenerator.class);
+    public void chooseModeTestWhenModeConsole() {
+        String input = "console";
+        TemplateGenerator templateGenerator = mock(TemplateGenerator.class);
         when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
-                .thenReturn( """
-                from : #{value}
-                to : #{value}
-                subject : #{value}
-                text : #{value}
-                """);
-        ConsoleMode mode=mock(ConsoleMode.class);
+                .thenReturn("""
+                        from : #{value}
+                        to : #{value}
+                        subject : #{value}
+                        text : #{value}
+                        """);
+        ConsoleMode mode = mock(ConsoleMode.class);
         when(mode.readConsoleInput()).thenReturn("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
                 """);
-        Parser parser=mock(Parser.class);
+        Parser parser = spy(Parser.class);
         when(parser.parseTemplate("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
-                """,List.of("from", "to", "subject", "text"))).thenReturn(Map.of("from", "MamukaKiknadze@gmail.com",
-                "to", "GiorgiDolidze@gmail.com",
-                "subject", "introduction meeting",
-                "text", "Hello, you are invited to introductory meeting of out training"));
-        when(mode.writeConsoleOutput("""
+                """, List.of("from", "to", "subject", "text")))
+                .thenReturn(Map.of("from", "MamukaKiknadze@gmail.com",
+                        "to", "GiorgiDolidze@gmail.com",
+                        "subject", "introduction meeting",
+                        "text", "Hello, you are invited to introductory meeting of out training"));
+        doNothing().when(mode).writeConsoleOutput("""
                 from : MamukaKiknadze@gmail.com
                 to : GiorgiDolidze@gmail.com
                 subject : introduction meeting
                 text : Hello, you are invited to introductory meeting of out training
-                """));
-
-        String expected="""
+                """);
+        String expected = """
                 from : MamukaKiknadze@gmail.com
                 to : GiorgiDolidze@gmail.com
                 subject : introduction meeting
                 text : Hello, you are invited to introductory meeting of out training
                 """;
 
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(input));
+        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(input, mode, parser));
     }
 
     @Test
@@ -79,7 +80,7 @@ public class MainTest {
                 subject : #{introduction meeting}
                 text : #{Hello, you are invited to introductory meeting of out training}
                 """);
-        Parser parser=mock(Parser.class);
+        Parser parser=spy(Parser.class);
         when(parser.parseTemplate("""
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
@@ -89,13 +90,13 @@ public class MainTest {
                 "to", "GiorgiDolidze@gmail.com",
                 "subject", "introduction meeting",
                 "text", "Hello, you are invited to introductory meeting of out training"));
-        when(mode.writeFileOutPut("fileOutput","/resources/fileoutput.txt",
+        doNothing().when(mode).writeFileOutPut("fileOutput","/resources/fileoutput.txt",
                 """
                 from : MamukaKiknadze@gmail.com
                 to : GiorgiDolidze@gmail.com
                 subject : introduction meeting
                 text : Hello, you are invited to introductory meeting of out training
-                """));
+                """);
 
         String expected="""
                 from : MamukaKiknadze@gmail.com
@@ -104,6 +105,6 @@ public class MainTest {
                 text : Hello, you are invited to introductory meeting of out training
                 """;
 
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(input));
+        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(input,mode,parser));
     }
 }

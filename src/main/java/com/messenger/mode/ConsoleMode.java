@@ -2,7 +2,7 @@ package com.messenger.mode;
 
 import java.util.Map;
 
-public class ConsoleMode {
+public class ConsoleMode extends Mode{
 
     public static ConsoleMode getConsoleModeInstance(){
         return new ConsoleMode();
@@ -12,7 +12,6 @@ public class ConsoleMode {
         return null;
     }
 
-    public String writeConsoleOutput(String output){
-        return null;
+    public void writeConsoleOutput(String output){
     }
 }

@@ -1,6 +1,6 @@
 package com.messenger.mode;
 
-public class FileMode {
+public class FileMode extends Mode{
 
     public static FileMode getFileModeInstace(){
         return new FileMode();
@@ -10,7 +10,6 @@ public class FileMode {
         return null;
     }
 
-    public String writeFileOutPut(String fileName, String filePath, String output){
-        return null;
+    public void writeFileOutPut(String fileName, String filePath, String output){
     }
 }
