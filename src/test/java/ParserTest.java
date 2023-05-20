@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import java.util.List;
 import java.util.Map;
 
-public class parserTest {
+public class ParserTest {
 
     @Test
     public void parseTemplateWithInvalidTemplateInputTest() {

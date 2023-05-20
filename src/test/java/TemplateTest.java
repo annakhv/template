@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import java.util.List;
 
 
-public class templateTest {
+public class TemplateTest {
 
 
 
