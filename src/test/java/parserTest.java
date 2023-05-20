@@ -9,7 +9,7 @@ public class parserTest {
 
     @Test
     public void parseTemplateWithInvalidTemplateInputTest() {
-        Parser parser=new Parser();
+        Parser parser=Parser.getParserInstance();
         String inputTemplate = """
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{value}
@@ -22,7 +22,7 @@ public class parserTest {
 
     @Test
     public void parseTemplateWithValidTemplateInputTest() {
-        Parser parser=new Parser();
+        Parser parser=Parser.getParserInstance();
         String inputTemplate = """
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}
@@ -38,7 +38,7 @@ public class parserTest {
     }
     @Test
     public void parseTemplateWithExtraInputTest() {
-        Parser parser=new Parser();
+        Parser parser=Parser.getParserInstance();
         String inputTemplate = """
                 from : #{MamukaKiknadze@gmail.com}
                 to : #{GiorgiDolidze@gmail.com}

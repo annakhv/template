@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Parser {
+
+
+    public static Parser getParserInstance(){
+        return new Parser();
+    }
     public  Map<String,String> parseTemplate(String template, List<String> validFields){
         String valueTemplate="#{value}";
       String[] values=template.split("\\n");

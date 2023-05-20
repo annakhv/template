@@ -4,7 +4,6 @@ public class ConsoleModeTest {
 
     @Test
    public void  checkConsoleTextTest(){
-
     }
 
 }
