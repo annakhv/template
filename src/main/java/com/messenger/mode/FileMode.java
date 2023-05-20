@@ -1,7 +1,5 @@
 package com.messenger.mode;
 
-import java.util.Map;
-
 public class FileMode {
 
     public static FileMode getFileModeInstace(){
@@ -12,7 +10,7 @@ public class FileMode {
         return null;
     }
 
-    public String writeFileOutPut(String fileName, String filePath, Map<String,String> output){
+    public String writeFileOutPut(String fileName, String filePath, String output){
         return null;
     }
 }

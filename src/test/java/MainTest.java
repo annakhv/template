@@ -1,5 +1,6 @@
 import com.messenger.Main;
 import com.messenger.mode.ConsoleMode;
+import com.messenger.mode.FileMode;
 import com.messenger.template.Parser;
 import com.messenger.template.TemplateGenerator;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class MainTest {
 
     @Test
-    public void chooseModeTestWhenModeFile(){
+    public void chooseModeTestWhenModeConsole(){
         String input="console";
         TemplateGenerator templateGenerator=mock(TemplateGenerator.class);
         when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
@@ -44,6 +45,52 @@ public class MainTest {
                 "subject", "introduction meeting",
                 "text", "Hello, you are invited to introductory meeting of out training"));
         when(mode.writeConsoleOutput("""
+                from : MamukaKiknadze@gmail.com
+                to : GiorgiDolidze@gmail.com
+                subject : introduction meeting
+                text : Hello, you are invited to introductory meeting of out training
+                """));
+
+        String expected="""
+                from : MamukaKiknadze@gmail.com
+                to : GiorgiDolidze@gmail.com
+                subject : introduction meeting
+                text : Hello, you are invited to introductory meeting of out training
+                """;
+
+        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(input));
+    }
+
+    @Test
+    public void chooseModeTestWhenModeFile(){
+        String input="file";
+        TemplateGenerator templateGenerator=mock(TemplateGenerator.class);
+        when(templateGenerator.generateTemplate(List.of("from", "to", "subject", "text")))
+                .thenReturn( """
+                from : #{value}
+                to : #{value}
+                subject : #{value}
+                text : #{value}
+                """);
+        FileMode mode=mock(FileMode.class);
+        when(mode.readFileInput("fileInput","/resources/file.txt")).thenReturn("""
+                from : #{MamukaKiknadze@gmail.com}
+                to : #{GiorgiDolidze@gmail.com}
+                subject : #{introduction meeting}
+                text : #{Hello, you are invited to introductory meeting of out training}
+                """);
+        Parser parser=mock(Parser.class);
+        when(parser.parseTemplate("""
+                from : #{MamukaKiknadze@gmail.com}
+                to : #{GiorgiDolidze@gmail.com}
+                subject : #{introduction meeting}
+                text : #{Hello, you are invited to introductory meeting of out training}
+                """,List.of("from", "to", "subject", "text"))).thenReturn(Map.of("from", "MamukaKiknadze@gmail.com",
+                "to", "GiorgiDolidze@gmail.com",
+                "subject", "introduction meeting",
+                "text", "Hello, you are invited to introductory meeting of out training"));
+        when(mode.writeFileOutPut("fileOutput","/resources/fileoutput.txt",
+                """
                 from : MamukaKiknadze@gmail.com
                 to : GiorgiDolidze@gmail.com
                 subject : introduction meeting
