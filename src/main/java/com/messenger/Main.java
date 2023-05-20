@@ -20,19 +20,23 @@ public class Main {
     }
 
 
-    public String chooseModeAndGiveAnswer(String filename,String filePath, String mode, Mode modeInstance,Parser parser) {
+    public String chooseModeAndGiveAnswer(String filename,String filePath, String mode, Mode modeInstance,Parser parser) throws InterruptedException {
         List<String> fields = List.of("from", "to", "cc", "subject", "text");
         String template = TemplateGenerator.getTemplateGenerator()
                 .generateTemplate(fields);
         if ("file".equalsIgnoreCase(mode)) {
             FileMode fileMode=(FileMode) modeInstance;
+            fileMode.writeFileOutPut(filename,filePath,template);
             String inputFromTemplate=fileMode.readFileInput(filename,filePath);
+            System.out.println("template "+inputFromTemplate);
            Map<String,String> resulMap=parser.parseTemplate(inputFromTemplate,fields);
            String result=createResult(resulMap);
+           fileMode.writeFileOutPut("fileOutput","resources/fileOutput.txt",result);
            return result;
 
         } else if ("console".equalsIgnoreCase(mode)) {
             ConsoleMode consoleMode = (ConsoleMode)modeInstance;
+            consoleMode.writeConsoleOutput(template);
             String inputFromTemplate = consoleMode.readConsoleInput();
             Map<String, String> resultMap = parser.parseTemplate(inputFromTemplate, fields);
             String result=createResult(resultMap);
