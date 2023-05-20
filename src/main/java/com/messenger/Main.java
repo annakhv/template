@@ -39,7 +39,7 @@ public class Main {
              consoleMode.writeConsoleOutput(result);
              return result;
         }
-        return null;
+        throw new RuntimeException("this mode "+mode+" is not available");
     }
 
 
