@@ -37,6 +37,7 @@ public class FileMode extends Mode {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(output);
+            bufferedWriter.flush();
             bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

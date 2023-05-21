@@ -12,24 +12,15 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+public class App {
 
-    public static Main getMainInstance() {
-        return new Main();
-    }
-
-    public static void main(String[] args) {
-        Main main = Main.getMainInstance();
-        Mode modeConsole = ConsoleMode.getConsoleModeInstance();
-        Mode modeFile = FileMode.getFileModeInstace();
-        Parser parser = Parser.getParserInstance();
-        List<String> fields = List.of("from", "to", "cc", "subject", "text");
-        // main.chooseModeAndGiveAnswer(null,null,"console",modeConsole,parser);
-        main.chooseModeAndGiveAnswer("myFile.txt", "src\\main\\resources\\myFile.txt", "file", modeFile, parser, fields);
+    public static App getMainInstance() {
+        return new App();
     }
 
 
     public String chooseModeAndGiveAnswer(String filename, String filePath, String mode, Mode modeInstance, Parser parser, List<String> fields) {
+        System.out.println("-------------------------");
         String template = TemplateGenerator.getTemplateGenerator()
                 .generateTemplate(fields);
         if ("file".equalsIgnoreCase(mode)) {
@@ -39,16 +30,19 @@ public class Main {
                 String inputFromTemplate = fileMode.readFileInput(filename, filePath);
                 Map<String, String> resulMap = parser.parseTemplate(inputFromTemplate, fields);
                 String result = createResult(resulMap);
-                fileMode.writeFileOutPut("fileOutput", "resources/fileOutput.txt", result);
+                fileMode.writeFileOutPut("fileOutput.txt", "C:\\Users\\annak\\OneDrive\\Desktop\\fileOutput.txt", result);
                 return result;
             } else {
                 System.out.println("program execution is stopped");
+                System.exit(1);
             }
-
-
         } else if ("console".equalsIgnoreCase(mode)) {
             ConsoleMode consoleMode = (ConsoleMode) modeInstance;
             consoleMode.writeConsoleOutput(template);
+            System.out.println("-------------------------");
+            System.out.println("please provide you input in accordance with given template, after entering the input" +
+                    " please click ctrl D !!!!");
+            System.out.println("-------------------------");
             String inputFromTemplate = consoleMode.readConsoleInput();
             Map<String, String> resultMap = parser.parseTemplate(inputFromTemplate, fields);
             String result = createResult(resultMap);
@@ -69,10 +63,11 @@ public class Main {
     }
 
     private boolean continueExecution() {
-        System.out.println("please write yes and than click ctrl D when template file is filled in");
+        System.out.println("please write yes when template file is filled in");
         String consoleInput;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             consoleInput = reader.readLine();
+            System.out.println("console input is "+consoleInput);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

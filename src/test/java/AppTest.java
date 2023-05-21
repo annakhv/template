@@ -1,4 +1,4 @@
-import com.messenger.Main;
+import com.messenger.App;
 import com.messenger.mode.ConsoleMode;
 import com.messenger.mode.FileMode;
 import com.messenger.template.Parser;
@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class MainTest {
+public class AppTest {
 
     @Test
     public void chooseModeTestWhenModeConsole() throws InterruptedException {
@@ -68,7 +68,7 @@ public class MainTest {
                 text : Hello, you are invited to introductory meeting of out training
                 """;
 
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer(null, null, input, mode, parser, fields));
+        Assertions.assertEquals(expected, App.getMainInstance().chooseModeAndGiveAnswer(null, null, input, mode, parser, fields));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class MainTest {
                 subject : introduction meeting
                 text : Hello, you are invited to introductory meeting of out training
                 """;
-        Assertions.assertEquals(expected, Main.getMainInstance().chooseModeAndGiveAnswer("fileInput", "/resources/file.txt", input, modeFile, parser, fields));
+        Assertions.assertEquals(expected, App.getMainInstance().chooseModeAndGiveAnswer("fileInput", "/resources/file.txt", input, modeFile, parser, fields));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class MainTest {
                         subject : #{value}
                         text : #{value}
                         """);
-        Assertions.assertThrows(RuntimeException.class, () -> Main.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, modeConsole, null, fields));
+        Assertions.assertThrows(RuntimeException.class, () -> App.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, modeConsole, null, fields));
 
     }
 }
