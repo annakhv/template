@@ -1,5 +1,8 @@
 package com.messenger.template;
 
+import com.messenger.exceptions.RequiredFiledsMissingException;
+import com.messenger.exceptions.TemplateFieldsEmptyException;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ public class Parser {
         Map<String, String> map = new LinkedHashMap<>();
         for (String val : values) {
             if (val.contains(valueTemplate)) {
-                throw new RuntimeException("template fields should not be empty");
+                throw new TemplateFieldsEmptyException("template fields should not be empty");
             } else {
                 String[] pair = val.split(":");
                 String key = pair[0].trim();
@@ -30,7 +33,7 @@ public class Parser {
             }
         }
         if (map.keySet().size() != validFields.size()) {
-            throw new RuntimeException("not all fields are filled from " + validFields);
+            throw new RequiredFiledsMissingException("fields are missing from " + validFields);
         }
         return map;
     }

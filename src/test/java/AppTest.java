@@ -1,4 +1,5 @@
 import com.messenger.App;
+import com.messenger.exceptions.ModeNotAvailableException;
 import com.messenger.mode.ConsoleMode;
 import com.messenger.mode.FileMode;
 import com.messenger.template.Parser;
@@ -140,7 +141,7 @@ public class AppTest {
                         subject : #{value}
                         text : #{value}
                         """);
-        Assertions.assertThrows(RuntimeException.class, () -> App.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, modeConsole, null, fields));
+        Assertions.assertThrows(ModeNotAvailableException.class, () -> App.getMainInstance().chooseModeAndGiveAnswer(null, null, mode, modeConsole, null, fields));
 
     }
 }

@@ -1,5 +1,6 @@
 package com.messenger;
 
+import com.messenger.exceptions.ModeNotAvailableException;
 import com.messenger.mode.ConsoleMode;
 import com.messenger.mode.FileMode;
 import com.messenger.mode.Mode;
@@ -49,7 +50,7 @@ public class App {
             consoleMode.writeConsoleOutput(result);
             return result;
         }
-        throw new RuntimeException("this mode " + mode + " is not available");
+        throw new ModeNotAvailableException("this mode " + mode + " is not available");
     }
 
 
